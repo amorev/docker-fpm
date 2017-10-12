@@ -50,8 +50,15 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-m
 
 
 COPY gearman_install.sh /gearman_install.sh
-RUN chmod +x /gearman_install.sh
-RUN /gearman_install.sh
+RUN cd /tmp/ && \
+    wget https://github.com/wcgallego/pecl-gearman/archive/master.zip --no-check-certificate && \
+    unzip master.zip && \
+    cd pecl-gearman-master && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    docker-php-ext-enable gearman
 
 RUN apt-get purge -y g++ \
     && apt-get autoremove -y \
