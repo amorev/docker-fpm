@@ -50,7 +50,8 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-m
 
 
 COPY gearman_install.sh /gearman_install.sh
-RUN chmod +x /gearman_install.sh && /gearman_install.sh
+RUN chmod +x /gearman_install.sh
+RUN /gearman_install.sh
 
 RUN apt-get purge -y g++ \
     && apt-get autoremove -y \
