@@ -49,7 +49,6 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-m
     && docker-php-ext-install redis
 
 
-COPY gearman_install.sh /gearman_install.sh
 RUN cd /tmp/ && \
     wget https://github.com/wcgallego/pecl-gearman/archive/master.zip --no-check-certificate && \
     unzip master.zip && \
