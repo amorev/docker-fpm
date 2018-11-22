@@ -77,8 +77,6 @@ RUN apt-get update \
     && usermod -u 1000 www-data \
     && rm wkhtmltox* -rf
 
-RUN apt-get update && apt-get install libjudy-dev libjudydebian1 -y && pecl install memprof
-
 COPY ./php.ini /usr/local/etc/php/
 COPY ./www.conf /usr/local/etc/php/
 
