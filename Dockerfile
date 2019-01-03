@@ -77,6 +77,9 @@ RUN apt-get update \
     && usermod -u 1000 www-data \
     && rm wkhtmltox* -rf
 
+RUN pecl install mongodb \
+      && docker-php-ext-enable mongodb
+
 COPY ./php.ini /usr/local/etc/php/
 COPY ./www.conf /usr/local/etc/php/
 
