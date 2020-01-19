@@ -80,7 +80,7 @@ RUN apt-get update \
 
 # install php-memprof
 RUN cd ~ \
-	&& mkdir php-memprof \
+	&& mkdir -p php-memprof \
 	&& cd php-memprof \
 	&& wget --no-check-certificate --content-disposition https://github.com/arnaud-lb/php-memory-profiler/tarball/2.0.0  \
 	&& tar -zxvf arnaud-lb-php-memory-profiler-2.0.0-0-gbdae20d.tar.gz \
@@ -90,8 +90,6 @@ RUN cd ~ \
 	&& make \
 	&& make install
 
-# enable php-memprof by default
-RUN docker-php-ext-enable memprof
 
 COPY ./php.ini /usr/local/etc/php/
 COPY ./www.conf /usr/local/etc/php/
