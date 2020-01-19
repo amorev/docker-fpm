@@ -26,33 +26,21 @@ RUN apt-get update \
         curl \
         wget \
         unzip \
-        libgearman-dev \
-    && docker-php-ext-install mcrypt zip intl mbstring pdo_mysql exif mysqli \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd \
-    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install imap \
-    && pecl install -o -f xdebug \
-    && rm -rf /tmp/pear \
-    && curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" \
-    && mkdir -p /usr/src/php/ext/memcached \
-    && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
-    && docker-php-ext-configure memcached \
-    && docker-php-ext-install memcached \
-    && rm /tmp/memcached.tar.gz \
-    && mkdir -p /usr/src/php/ext/redis \
-    && curl -L https://github.com/phpredis/phpredis/archive/3.0.0.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
-    && echo 'redis' >> /usr/src/php-available-exts \
-    && docker-php-ext-install redis \
-    && cd /tmp/ \
+        libgearman-dev
+RUN apt-get install -y libonig-dev && docker-php-ext-install intl mbstring pdo_mysql exif mysqli
+RUN docker-php-ext-install gd
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+RUN cd /tmp/ \
     && wget https://github.com/wcgallego/pecl-gearman/archive/master.zip --no-check-certificate \
     && unzip master.zip \
     && cd pecl-gearman-master \
     && phpize \
     && ./configure \
     && make \
-    && make install \
-    && apt-get install libfontconfig1 libxrender1 xvfb -y \
+    && make install
+RUN apt-get install libfontconfig1 libxrender1 xvfb -y \
     && cd ~ \
     && wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz \
     && tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz \
@@ -76,6 +64,11 @@ RUN apt-get update \
     && mv /var/soft/composer.phar /usr/bin/composer \
     && usermod -u 1000 www-data \
     && rm wkhtmltox* -rf
+
+RUN apt-get update -y && \
+        apt-get install -y libmcrypt-dev && \
+        pecl install mcrypt-1.0.3 && \
+        docker-php-ext-enable mcrypt
 
 RUN pecl install mongodb \
       && docker-php-ext-enable mongodb
